@@ -7,6 +7,7 @@ require('dotenv').config()
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var bookmarksRouter = require('./routes/bookmarks');
 
 var app = express();
 
@@ -22,20 +23,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/bookmarks', bookmarksRouter);
 
-//Import the mongoose module
+//Mongoose
 var mongoose = require('mongoose');
-
-//Set up default mongoose connection
 var mongoDB = process.env.MONGODB;
-mongoose.connect(mongoDB);
-// Get Mongoose to use the global promise library
+mongoose.connect(mongoDB, { useNewUrlParser: true } );
 mongoose.Promise = global.Promise;
-//Get the default connection
 var db = mongoose.connection;
-//Bind connection to error event (to get notification of connection errors)
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
